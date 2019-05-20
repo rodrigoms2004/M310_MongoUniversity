@@ -1,0 +1,1 @@
+{"virtualbox":{"/home/vagrant/shared":{"create":true,"guestpath":"/home/vagrant/shared","hostpath":"/home/rodrigo/Documents/university/m310/m310-vagrant-env/shared","disabled":false,"__vagrantfile":true},"/vagrant":{"guestpath":"/vagrant","hostpath":"/home/rodrigo/Documents/university/m310/m310-vagrant-env","disabled":false,"__vagrantfile":true}}}

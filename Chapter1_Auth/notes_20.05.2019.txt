@@ -1,0 +1,121 @@
+vagrant up
+
+vagrant status
+
+mongod --version
+
+vagrant ssh
+
+vagrant halt
+
+
+###################################
+Authentication vs Authorization
+
+Authentication, verifies the identity of a user, "Who are you?"
+Authorization, verifies the privileges of a user, "What do you have access to?"
+
+###################################
+Authentication Mechanisms Overview
+
+- Client/User Auth
+    Community version: 
+        SCRAM-SHA-1, MONGODB-CR => Challenge/Response
+        X.509                   => Certificate
+    Enterprise version: 
+        LDAP, Kerberos          => External
+
+- Internal Auth
+    Keyfile (SCRAM-SHA-1), X.509
+
+
+###################################
+Authentication Mechanisms
+
+SCRAM-SHA-1 (default)
+    Challenge/Response
+    Username/Password
+    IETF Standard
+
+    It protects you 
+        Eavesdropping
+        Replay
+        Database Compromise
+        Malicious Server
+
+MONGODB-CR (deprecated as of MongoDB 3.0)
+    Challenge/Response
+    Username/Password
+    Replaced by SCRAM-SHA-1 
+
+X.509 Certificates
+    Certificate based
+    Introduced in MongoDB 2.6
+    TLS
+
+###################################
+LDAP
+    Lightweight Directory Access Protocol
+    MongoDB Enterprise
+    Used for directory information
+    External Authentication Mechanism
+
+Kerberos
+    MongoDB Enterprise
+    Developed at MIT
+    Designed for secure Authentication
+    
+###################################
+Internal Authentication Mechanisms
+
+Members of a replica set of sharded cluster must prove who they are
+
+Keyfile (SCRAM-SHA-1)
+    shared Password
+    copy exists on each member
+    6-1024 Base64 characters
+    whitespace ignored
+
+    "my password" == "mypassword"
+
+X.509
+    Certificate based
+    recommended to issue different certs per member
+    
+
+###################################
+The Localhost Exception
+
+mongod --auth
+
+
+MongoDB Enterprise > show dbs
+2019-05-20T19:11:17.014+0000 E QUERY    [thread1] Error: listDatabases failed:{
+        "ok" : 0,
+        "errmsg" : "there are no users authenticated",
+        "code" : 13,
+        "codeName" : "Unauthorized"
+} :
+_getErrorWithCode@src/mongo/shell/utils.js:25:13
+Mongo.prototype.getDBs@src/mongo/shell/mongo.js:67:1
+shellHelper.show@src/mongo/shell/utils.js:860:19
+shellHelper@src/mongo/shell/utils.js:750:15
+@(shellhelp2):1:1
+MongoDB Enterprise > 
+
+
+use admin
+
+db.createUser({user: 'kirby', pwd: 'password', roles: [{role: 'userAdminAnyDatabase', db: 'admin'}]})
+
+db.createUser({user: 'will', pwd: 'password', roles: [{role: 'userAdminAnyDatabase', db: 'admin'}]})
+
+db.auth('kirby', 'password')
+
+db.system.users.find()
+
+
+
+###################################
+
+
